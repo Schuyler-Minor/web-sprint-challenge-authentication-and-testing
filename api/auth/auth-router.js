@@ -1,7 +1,8 @@
 const router = require("express").Router();
 const {
-  validateRegistrationBody,
+  validateRequestBody,
   checkUsernameAvailable,
+  checkUsernameExists,
 } = require("./auth-middleware");
 
 const { BCRYPT_ROUNDS } = require("../../config/index");
@@ -10,8 +11,9 @@ const bcrypt = require("bcryptjs");
 
 router.post(
   "/register",
-  validateRegistrationBody,
+  validateRequestBody,
   checkUsernameAvailable,
+
   async (req, res) => {
     let user = req.body;
     const hash = bcrypt.hashSync(user.password, BCRYPT_ROUNDS);
@@ -53,7 +55,7 @@ router.post(
   }
 );
 
-router.post("/login", (req, res) => {
+router.post("/login", validateRequestBody, checkUsernameExists, (req, res) => {
   res.end("implement login, please!");
   /*
     IMPLEMENT

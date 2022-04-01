@@ -1,6 +1,6 @@
 const Users = require("../users/users-model");
 
-function validateRegistrationBody(req, res, next) {
+function validateRequestBody(req, res, next) {
   if (
     !req.body.username ||
     !req.body.username.trim() ||
@@ -21,4 +21,19 @@ async function checkUsernameAvailable(req, res, next) {
   }
 }
 
-module.exports = { validateRegistrationBody, checkUsernameAvailable };
+async function checkUsernameExists(req, res, next) {
+  try {
+    const user = await Users.findBy({ username: req.body.username });
+    if (!user) {
+      res.status(401).json({ message: "invalid credentials" });
+    }
+  } catch (err) {
+    next(err);
+  }
+}
+
+module.exports = {
+  validateRequestBody,
+  checkUsernameAvailable,
+  checkUsernameExists,
+};
