@@ -4,12 +4,16 @@ const {
   checkUsernameAvailable,
 } = require("./auth-middleware");
 
+const bcrypt = require("bcryptjs");
+
 router.post(
   "/register",
   validateRegistrationBody,
   checkUsernameAvailable,
   (req, res) => {
-    res.end("implement register, please!");
+    let user = req.body;
+    const hash = bcrypt.hashSync(user.password);
+
     /*
     IMPLEMENT
     You are welcome to build additional middlewares to help with the endpoint's functionality.
