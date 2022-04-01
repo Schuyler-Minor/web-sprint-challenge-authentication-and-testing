@@ -4,15 +4,26 @@ const {
   checkUsernameAvailable,
 } = require("./auth-middleware");
 
+const { BCRYPT_ROUNDS } = require("../../config/index");
+const Users = require("./../users/users-model");
 const bcrypt = require("bcryptjs");
 
 router.post(
   "/register",
   validateRegistrationBody,
   checkUsernameAvailable,
-  (req, res) => {
+  async (req, res) => {
     let user = req.body;
-    const hash = bcrypt.hashSync(user.password);
+    const hash = bcrypt.hashSync(user.password, BCRYPT_ROUNDS);
+
+    user.password = hash;
+
+    try {
+      const newUser = await Users.add(user);
+      res.status(201).json(newUser);
+    } catch (err) {
+      next(err);
+    }
 
     /*
     IMPLEMENT

@@ -7,8 +7,9 @@ function validateRegistrationBody(req, res, next) {
     !req.body.password ||
     !req.body.password.trim()
   ) {
-    next({ status: 400, message: "username and password required" });
+    return next({ status: 400, message: "username and password required" });
   }
+  next();
 }
 
 async function checkUsernameAvailable(req, res, next) {
