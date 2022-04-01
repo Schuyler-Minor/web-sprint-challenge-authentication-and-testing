@@ -5,6 +5,11 @@ async function add(user) {
   return db("users").where("id", id);
 }
 
+function findBy(filter) {
+  return db("users").where(filter);
+}
+
 module.exports = {
   add,
+  findBy,
 };
