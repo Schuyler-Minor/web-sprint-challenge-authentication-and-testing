@@ -19,11 +19,7 @@ server.use("/api/jokes", restrict, jokesRouter); // only logged-in users should 
 
 server.use((err, req, res, next) => {
   res.status(err.status || 500).json({
-    message:
-      process.env.NODE_ENV === "development"
-        ? err.message
-        : "Something went wrong",
-    stack: err.stack,
+    message: "something went wrong",
   });
 });
 
